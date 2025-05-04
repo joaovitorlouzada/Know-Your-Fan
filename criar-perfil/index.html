@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Criação de Perfil - Know Your Fan</title>
+  <link rel="stylesheet" href="style.css"/>
+
+  <script async defer crossorigin="anonymous" 
+    src="https://connect.facebook.net/pt_BR/sdk.js#xfbml=1&version=v16.0&appId=3935322630067713&autoLogAppEvents=1"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Seu Perfil FURIA</h1>
+    <form id="perfil-form">
+      <div class="profile-upload-container">
+        <div id="profile-preview" class="profile-preview">Foto de perfil</div>
+        <input type="file" id="profile-pic" accept="image/*" style="display: none;">
+        <button type="button" class="upload-button" onclick="document.getElementById('profile-pic').click();">Escolher Foto</button>
+      </div>
+
+      <label for="nome">Nome completo:</label>
+      <input type="text" id="nome" name="nome" required/>
+
+      <label for="cpf">CPF:</label>
+      <input type="text" id="cpf" name="cpf" required/>
+
+      <label for="endereco">Endereço:</label>
+      <input type="text" id="endereco" name="endereco" required/>
+
+      <label for="interesses">Quais são seus interesses no último ano?</label>
+      <textarea id="interesses" name="interesses" placeholder="Ex: eventos, compras, atividades..." required></textarea>
+
+      <label for="documento">Upload de Documento de Identidade:</label>
+      <input type="file" id="documento" name="documento" accept=".jpg,.jpeg,.png,.pdf" required/>
+
+      <label>Quais modalidades você acompanha?</label>
+      <div class="modalidades-grid">
+        <label><input type="checkbox" name="modalidades" value="cs"> Counter-Strike (CS)</label>
+        <label><input type="checkbox" name="modalidades" value="valorant"> Valorant</label>
+        <label><input type="checkbox" name="modalidades" value="r6"> Rainbow Six</label>
+        <label><input type="checkbox" name="modalidades" value="lol"> League of Legends</label>
+      </div>
+
+      <label for="social-media">Vincule sua conta do Facebook:</label>
+    <div class="facebook-login-wrapper">
+      <button type="button" onclick="loginFacebook()" class="facebook-button" aria-label="Entrar com Facebook">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook" class="facebook-logo">
+      </button>
+    </div>
+      <button type="submit">Salvar Perfil</button>
+    </form>
+  </div>
+
+  <script>
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId: '3935322630067713',
+        cookie: true,
+        xfbml: true,
+        version: 'v16.0'
+      });
+    };
+
+    function loginFacebook() {
+      FB.login(function(response) {
+        if (response.authResponse) {
+          FB.api('/me', { fields: 'id,name,email' }, function(response) {
+            document.getElementById('nome').value = response.name;
+            document.getElementById('facebook').value = `https://facebook.com/${response.id}`;
+          });
+        }
+      }, {scope: 'email'});
+    }
+
+    document.getElementById("perfil-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const nome = document.getElementById("nome").value;
+      const cpf = document.getElementById("cpf").value;
+      const endereco = document.getElementById("endereco").value;
+      const modalidades = Array.from(document.querySelectorAll("input[name='modalidades']:checked"))
+        .map(input => input.value);
+
+      // Pega imagem salva temporariamente no localStorage
+      const foto = localStorage.getItem("fotoPerfil");
+
+      const perfil = { nome, cpf, endereco, modalidades, foto };
+
+      localStorage.setItem("perfilFuria", JSON.stringify(perfil));
+
+      alert("Perfil salvo!");
+      window.location.href = "../home/index.html";
+    });
+
+    document.getElementById('profile-pic').addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const fotoBase64 = e.target.result;
+
+          const preview = document.getElementById('profile-preview');
+          preview.style.backgroundImage = `url('${fotoBase64}')`;
+          preview.style.backgroundSize = 'cover';
+          preview.style.backgroundPosition = 'center';
+          preview.textContent = '';
+
+          // Agora salva no localStorage, não no sessionStorage
+          localStorage.setItem("fotoPerfil", fotoBase64);
+        }
+        reader.readAsDataURL(file);
+      }
+    });
+  </script>
+</body>
+</html>

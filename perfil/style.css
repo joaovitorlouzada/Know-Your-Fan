@@ -1,0 +1,69 @@
+body {
+  background: #111;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+}
+
+.profile-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  min-height: 100vh;
+  background: linear-gradient(145deg, #0f0f0f, #1a1a1a);
+}
+
+.profile-card {
+  background: #1f1f1f;
+  border-radius: 20px;
+  padding: 30px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+.profile-preview {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  border: 3px solid #444;
+  margin: 0 auto 20px;
+  background-color: #222;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #aaa;
+  font-size: 0.9rem;
+  background-size: cover;
+  background-position: center;
+}
+
+h2 {
+  margin: 10px 0 20px;
+  font-size: 1.5rem;
+  color: #f1f1f1;
+}
+
+p {
+  margin: 10px 0;
+  color: #ccc;
+}
+
+.edit-button {
+  margin-top: 25px;
+  padding: 12px 20px;
+  background: #8e44ad;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.edit-button:hover {
+  background: #732d91;
+}

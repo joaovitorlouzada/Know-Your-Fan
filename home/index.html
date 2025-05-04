@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FURIA Insights 🔥</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@500&display=swap" rel="stylesheet">
+  <script async src="https://www.instagram.com/embed.js"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <button class="menu-toggle" id="menu-toggle">☰</button>
+    <div class="navbar-center">
+      <ul id="navbar-links">
+        <li><a href="../chatbot/index.html">Chatbot</a></li>
+        <li><a href="../perfil/index.html">Perfil</a></li>
+        <li><a href="../feed/index.html">Feed</a></li>
+        <li><a href="../mapa/index.html">Mapa</a></li>
+      </ul>
+    </div>
+    <img id="avatar-navbar" src="https://www.w3schools.com/howto/img_avatar.png" alt="Perfil" class="avatar" onclick="window.location.href='../perfil/index.html'">
+  </nav>
+
+  <!-- Conteúdo Principal -->
+  <div class="container">
+    <img src="https://images.seeklogo.com/logo-png/42/2/furia-esports-logo-png_seeklogo-428783.png" alt="Logo FURIA" class="furia-logo">
+    <h1>🎮 Posts Recentes da FURIA</h1>
+    <div id="posts-container" class="scrollable"></div>
+  </div>
+
+  <!-- Widget de Chat -->
+  <div id="chat-widget">
+    <button id="chat-toggle">💬</button>
+  
+    <div id="chat-box">
+      <div id="chat-header">
+        <span>💬 Chatbot FURIA</span>
+        <button id="chat-close">✖</button>
+      </div>
+      <iframe src="../chatbot/index.html" title="Chatbot FURIA"></iframe>
+    </div>
+  </div>
+  
+
+  <!-- Script para Carregar os Posts e Controlar o Chat -->
+  <script type="module">
+    import furiaPosts from "./posts.js";
+
+    // Função para intercalar aleatoriamente as listas de posts
+    function intercalarAleatorio(lists) {
+      const filas = lists.map(arr => [...arr]); // cópia das listas
+      const resultado = [];
+
+      while (filas.some(fila => fila.length > 0)) {
+        const filasComItens = filas.filter(fila => fila.length > 0);
+        const indiceAleatorio = Math.floor(Math.random() * filasComItens.length);
+        const filaEscolhida = filasComItens[indiceAleatorio];
+        const post = filaEscolhida.shift();
+        resultado.push(post);
+      }
+
+      return resultado;
+    }
+
+    // Obtém o perfil do usuário armazenado no localStorage
+    const perfil = JSON.parse(localStorage.getItem("perfilFuria"));
+    const modalidadesSelecionadas = perfil?.modalidades || [];
+
+    const todasAsListas = [];
+
+    if (modalidadesSelecionadas.includes("cs")) todasAsListas.push(furiaPosts.cs);
+    if (modalidadesSelecionadas.includes("valorant")) todasAsListas.push(furiaPosts.valorant);
+    if (modalidadesSelecionadas.includes("lol")) todasAsListas.push(furiaPosts.lol);
+    if (modalidadesSelecionadas.includes("r6")) todasAsListas.push(furiaPosts.r6);
+
+    const todosOsPosts = intercalarAleatorio(todasAsListas);
+    const container = document.getElementById("posts-container");
+
+    // Espera o carregamento da página e insere os posts
+    document.addEventListener("DOMContentLoaded", () => {
+      todosOsPosts.forEach((embed) => {
+        const temp = document.createElement("div");
+        temp.innerHTML = embed.trim();
+        const blockquote = temp.querySelector("blockquote");
+        if (blockquote) {
+          const wrapper = document.createElement("div");
+          wrapper.className = "instagram-embed";
+          wrapper.appendChild(blockquote);
+          container.appendChild(wrapper);
+        }
+      });
+
+      setTimeout(() => {
+        if (window.instgrm?.Embeds?.process) {
+          window.instgrm.Embeds.process();
+        }
+      }, 500);
+    });
+  </script>
+
+  <script>
+    // Função para abrir/fechar o menu na versão mobile
+    document.getElementById("menu-toggle").addEventListener("click", () => {
+      document.getElementById("navbar-links").classList.toggle("show");
+    });
+  </script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const fotoPerfil = localStorage.getItem("fotoPerfil");
+      const avatarImg = document.getElementById("avatar-navbar");
+  
+      if (fotoPerfil && avatarImg) {
+        avatarImg.src = fotoPerfil;
+      }
+    });
+  </script>
+  <script>
+  const chatToggle = document.getElementById("chat-toggle");
+  const chatBox = document.getElementById("chat-box");
+  const chatClose = document.getElementById("chat-close");
+
+  chatToggle.addEventListener("click", () => {
+    chatBox.style.display = "flex";
+    chatToggle.style.display = "none";
+  });
+
+  chatClose.addEventListener("click", () => {
+    chatBox.style.display = "none";
+    chatToggle.style.display = "inline-block";
+  });
+</script>
+
+  
+</body>
+</html>

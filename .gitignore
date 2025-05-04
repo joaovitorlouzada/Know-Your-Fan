@@ -1,0 +1,21 @@
+# Ignore arquivos de ambiente Python
+venv/
+__pycache__/
+*.py[cod]
+*.env
+
+# Ignore arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Ignore logs
+*.log
+
+# Ignore arquivos temporários do editor
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# Arquivo de variáveis de ambiente
+.env

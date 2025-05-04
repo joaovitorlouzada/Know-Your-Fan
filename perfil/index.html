@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Meu Perfil FURIA</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Meu Perfil</h1>
+    <div id="profile-preview" class="profile-preview">Foto de perfil</div>
+    <p><strong>Nome:</strong> <span id="perfil-nome"></span></p>
+    <p><strong>CPF:</strong> <span id="perfil-cpf"></span></p>
+    <p><strong>Endereço:</strong> <span id="perfil-endereco"></span></p>
+    <p><strong>Modalidades:</strong> <span id="perfil-modalidades"></span></p>
+    <button class="edit-button" onclick="window.location.href='../criar-perfil/index.html'">Editar Perfil</button>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const perfil = JSON.parse(localStorage.getItem("perfilFuria"));
+
+      if (perfil) {
+        document.getElementById("perfil-nome").textContent = perfil.nome;
+        document.getElementById("perfil-cpf").textContent = perfil.cpf;
+        document.getElementById("perfil-endereco").textContent = perfil.endereco;
+        document.getElementById("perfil-modalidades").textContent = perfil.modalidades.join(", ");
+        
+        const fotoPerfil = localStorage.getItem("fotoPerfil"); // Recupera a foto do localStorage
+        if (fotoPerfil) {
+          const preview = document.getElementById("profile-preview");
+          preview.style.backgroundImage = `url('${fotoPerfil}')`;
+          preview.style.backgroundSize = "cover";
+          preview.style.backgroundPosition = "center";
+          preview.textContent = ""; // Remove o texto "Foto de perfil"
+        } else {
+          const preview = document.getElementById("profile-preview");
+          preview.textContent = "Foto de perfil não encontrada"; // Se não houver foto, mostrar um texto
+        }
+      } else {
+        document.querySelector(".container").innerHTML = "<p>Nenhum perfil encontrado.</p>";
+      }
+    });
+  </script>
+</body>
+</html>
